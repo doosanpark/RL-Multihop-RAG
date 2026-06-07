@@ -2,7 +2,7 @@
 
 **서강대학교 강화학습 수업 프로젝트**
 박두산 A72051 (팀장) · 신세정 A72058 (팀원)
-GitHub: https://github.com/doosanpark/RAG_RL
+GitHub: https://github.com/doosanpark/RL-Multihop-RAG.git
 
 ---
 
