@@ -39,12 +39,12 @@ tags:
 
 # {repo_name}
 
-RAG_RL 클래스 프로젝트 — Solution A의 {tag} LoRA 어댑터.
+RL-Multihop-RAG 클래스 프로젝트 — Solution A의 {tag} LoRA 어댑터.
 
 - Base: `Qwen/Qwen2.5-0.5B-Instruct`
 - 학습 방식: {desc}
 - 데이터: HotpotQA distractor split
-- 코드/보고서: https://github.com/{user}/RAG_RL  (자세한 결과는 `report_solution_a.md`)
+- 코드/보고서: https://github.com/{user}/RL-Multihop-RAG  (자세한 결과는 `report_solution_a.md`)
 
 ## 사용
 ```python

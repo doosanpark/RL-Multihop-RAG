@@ -4,6 +4,8 @@
 박두산 A72051 (팀장) · 신세정 A72058 (팀원)
 GitHub: https://github.com/doosanpark/RL-Multihop-RAG.git
 
+📊 **발표자료(보고서)**: [RL_Project_Presentation.pdf](RL_Project_Presentation.pdf) · [RL_Project_Presentation.pptx](RL_Project_Presentation.pptx)
+
 ---
 
 ## 프로젝트 개요
@@ -233,7 +235,7 @@ python -m src.ask --policy rl --ckpt models/step_seed42_final.pt
 
 모든 체크포인트를 단일 zip (~40 MB)으로 제공.
 
-**[model_releases/rag_rl_checkpoints.zip](https://github.com/doosanpark/RAG_RL/raw/main/model_releases/rag_rl_checkpoints.zip)**
+**[model_releases/rag_rl_checkpoints.zip](https://github.com/doosanpark/RL-Multihop-RAG/raw/main/model_releases/rag_rl_checkpoints.zip)**
 
 | 단계 | 경로 | 형식 | 크기 |
 |:--|:--|:--|:--|
