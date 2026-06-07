@@ -1,0 +1,41 @@
+# Python 3.11 기준 — 2026.05 검증된 조합
+# PyTorch는 CUDA 빌드로 별도 설치 (README 참고)
+# torch==2.5.1+cu121  -- index-url https://download.pytorch.org/whl/cu121
+
+# Core (numpy 2.x는 pyarrow/pandas 최신과 ABI 충돌해서 1.26 고정)
+numpy==1.26.4
+
+# HuggingFace 생태계 (pyarrow 21+를 요구하는 datasets 4.x는 ABI 문제로 회피)
+datasets==2.21.0
+transformers>=4.42
+sentence-transformers>=3.0
+huggingface-hub>=0.23
+accelerate>=0.30
+fsspec<=2024.6.1
+dill==0.3.8
+multiprocess==0.70.16
+
+# arrow / pandas — 17/2.3 조합으로 고정 (24/3.0는 Windows 액세스 위반)
+pyarrow==17.0.0
+pandas==2.3.3
+
+# 검색
+faiss-cpu>=1.8
+
+# RL 환경 sanity check
+gymnasium>=0.29
+
+# 실험 추적
+wandb>=0.17
+
+# 유틸
+python-dotenv>=1.0
+tqdm>=4.66
+pyyaml>=6.0
+
+# 평가 / 시각화
+scikit-learn>=1.4
+matplotlib>=3.8
+
+# 테스트
+pytest>=8.2

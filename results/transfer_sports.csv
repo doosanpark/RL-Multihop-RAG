@@ -1,0 +1,7 @@
+method,answer_f1,answer_f1_std,support_f1
+oracle,0.4517,,1.0
+top_k_sim_k3,0.3856,,0.6663
+use_all,0.3688,,0.4
+random_k3,0.2627,,0.3051
+RL_step (3seed),0.2698,0.0376,0.4614
+RL_sparse (3seed),0.2668,0.0337,0.4563

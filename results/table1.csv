@@ -1,0 +1,7 @@
+method,answer_f1,answer_f1_std,exact_match,support_f1,avg_n_kept,n
+oracle_k3,0.5571,0.4427,0.42,1.0,2.0,200
+top_k_sim_k3,0.3695,0.4494,0.28,0.582,2.99,200
+use_all,0.3673,0.4452,0.275,0.3403,9.91,200
+random_k3,0.2754,0.4169,0.2,0.258,2.99,200
+rl_step_seed42_best_greedy,0.3455,0.4406,0.265,0.5325,2.0,200
+rl_sparse_seed42_best_greedy,0.356,0.4431,0.27,0.4908,2.0,200

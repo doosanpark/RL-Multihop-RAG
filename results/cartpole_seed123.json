@@ -1,0 +1,18 @@
+{
+  "solved": true,
+  "solved_episode": 185,
+  "max_episodes": 500,
+  "final_avg100": 196.56,
+  "hyperparams": {
+    "seed": 123,
+    "lr_policy": 0.001,
+    "lr_value": 0.001,
+    "gamma": 0.99,
+    "hidden_dims": [
+      256,
+      128
+    ],
+    "grad_clip": 1.0,
+    "normalize_advantage": true
+  }
+}

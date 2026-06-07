@@ -1,0 +1,30 @@
+{
+  "n": 200,
+  "answer_f1": 0.35017857142857145,
+  "answer_f1_std": 0.44732582451979336,
+  "exact_match": 0.275,
+  "support_f1": 0.49583333333333335,
+  "avg_n_kept": 1.975,
+  "avg_n_steps": 9.91,
+  "elapsed_sec": 29.25673508644104,
+  "by_type": {
+    "bridge": {
+      "f1": 0.30279304029304027,
+      "n": 156
+    },
+    "comparison": {
+      "f1": 0.5181818181818181,
+      "n": 44
+    }
+  },
+  "by_level": {
+    "hard": {
+      "f1": 0.35017857142857145,
+      "n": 200
+    }
+  },
+  "variant": "rl_sparse_seed7_best_greedy",
+  "n_eval": 200,
+  "ckpt": "models/sparse_seed7_best.pt",
+  "policy_mode": "greedy"
+}

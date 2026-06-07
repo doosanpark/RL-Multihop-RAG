@@ -1,0 +1,5 @@
+variant,n,answer_f1,answer_f1_std,exact_match,support_f1,avg_n_kept,avg_n_steps,elapsed_sec
+top_k_sim_k3,200,0.3695,0.4494,0.28,0.582,2.99,3.0,30.5
+use_all,200,0.3673,0.4452,0.275,0.3403,9.91,9.91,73.0
+random_k3,200,0.2754,0.4169,0.2,0.258,2.99,2.99,27.2
+oracle_k3,200,0.5571,0.4427,0.42,1.0,2.0,2.0,26.8

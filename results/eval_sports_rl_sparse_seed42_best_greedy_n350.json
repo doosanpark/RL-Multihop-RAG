@@ -1,0 +1,31 @@
+{
+  "n": 350,
+  "answer_f1": 0.29243411258426605,
+  "answer_f1_std": 0.30745916987314453,
+  "exact_match": 0.08,
+  "support_f1": 0.5318095238095238,
+  "avg_n_kept": 1.86,
+  "avg_n_steps": 8.0,
+  "elapsed_sec": 86.32279443740845,
+  "by_type": {
+    "bridge": {
+      "f1": 0.2706584643556244,
+      "n": 305
+    },
+    "comparison": {
+      "f1": 0.44002461724505965,
+      "n": 45
+    }
+  },
+  "by_level": {
+    "hard": {
+      "f1": 0.29243411258426605,
+      "n": 350
+    }
+  },
+  "variant": "rl_sparse_seed42_best_greedy",
+  "domain": "sports",
+  "n_eval": 350,
+  "ckpt": "models/sparse_seed42_best.pt",
+  "policy_mode": "greedy"
+}

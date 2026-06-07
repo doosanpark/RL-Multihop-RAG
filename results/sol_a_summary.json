@@ -1,0 +1,50 @@
+[
+  {
+    "model": "frozen-base (in-domain)",
+    "f1": "0.006",
+    "em": "0.000",
+    "bridge": "0.005",
+    "comparison": "0.007",
+    "k": "1"
+  },
+  {
+    "model": "SFT (in-domain)",
+    "f1": "0.434",
+    "em": "0.340",
+    "bridge": "0.435",
+    "comparison": "0.428",
+    "k": "1"
+  },
+  {
+    "model": "RL 3-seed (in-domain)",
+    "f1": "0.469±0.007",
+    "em": "0.372±0.002",
+    "bridge": "0.445±0.010",
+    "comparison": "0.568±0.024",
+    "k": "3"
+  },
+  {
+    "model": "frozen-base (sports)",
+    "f1": "0.005",
+    "em": "0.000",
+    "bridge": "0.005",
+    "comparison": "  –  ",
+    "k": "1"
+  },
+  {
+    "model": "SFT (sports)",
+    "f1": "0.299",
+    "em": "0.094",
+    "bridge": "0.282",
+    "comparison": "0.414",
+    "k": "1"
+  },
+  {
+    "model": "RL 3-seed (sports)",
+    "f1": "0.313±0.023",
+    "em": "0.103±0.002",
+    "bridge": "0.284±0.017",
+    "comparison": "0.507±0.068",
+    "k": "3"
+  }
+]

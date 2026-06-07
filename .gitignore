@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# 가상환경
+.venv/
+venv/
+env/
+
+# 비밀
+.env
+.env.local
+*.key
+wandb/
+
+# 데이터 (대용량은 git에 안 올림)
+data/raw/
+data/processed/
+*.parquet
+*.arrow
+
+# 모델 체크포인트
+models/*.pt
+models/*.bin
+models/*.safetensors
+!models/.gitkeep
+
+# 결과물 (이미지/csv는 일부 commit, 큰 파일은 제외)
+results/*.pt
+logs/*.log
+logs/wandb_export/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Jupyter
+*.ipynb
+/.claude
