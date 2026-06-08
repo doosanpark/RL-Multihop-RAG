@@ -14,8 +14,8 @@ GitHub: https://github.com/doosanpark/RL-Multihop-RAG.git
 
 본 프로젝트는 이 문제를 **순차적 의사결정(Sequential Decision Making)**으로 재정의하고, 강화학습으로 문서 선택 정책을 학습하는 것을 목표로 한다. 실험은 두 단계로 나뉜다.
 
-- **PART 1**: LLM은 고정(freeze)하고, 소형 MLP 정책망으로 문서 선택만 학습 (REINFORCE + Baseline)
-- **PART 2**: 정책망의 한계를 진단한 뒤, LLM 자체를 LoRA SFT → GRPO RL로 파인튜닝하여 추론 능력까지 학습 (Search-R1 방식)
+- **PART 1**: LLM은 고정(freeze)하고, 소형 MLP 정책망으로 문서 선택만 학습. 핵심 질문은 "RL이 이겼나/졌나"가 아니라 **학습형 selection의 한계를 규명**하는 것 — 비-학습(cosine 휴리스틱) · 지도학습(BC-only) · RL(REINFORCE+baseline)의 **3점 비교**로 진단한다.
+- **PART 2**: 정책망의 한계를 진단한 뒤, LLM 자체를 LoRA SFT → GRPO RL로 파인튜닝하여 추론 능력까지 학습 (Search-R1 방식). PART 1의 *cosine·BC·RL* 3점 비교는 PART 2의 *비학습 baseline · SFT(지도학습) · GRPO(RL)* 구도와 정확히 대구를 이룬다.
 
 ---
 
@@ -27,7 +27,8 @@ GitHub: https://github.com/doosanpark/RL-Multihop-RAG.git
 |:--|--:|:--|
 | Oracle (정답 문서만 입력) | 0.557 | Frozen Qwen2.5-0.5B의 이론적 상한 |
 | **cosine 휴리스틱** (top-3) | 0.370 | 학습 없이 cosine 유사도로 top-3 선택 (Naive RAG) — PART 1이 넘지 못한 기준선 |
-| **PART 1: Step-wise RL** | **0.355 ± 0.012** | H1/H2 기각 — cosine 휴리스틱에 미달 |
+| **BC-only (지도학습 베이스라인)** | 0.335 ± 0.005 | 학습은 하되 RL은 아님 — expert 시연을 모방학습(BC)만. RL 정책의 출발점 |
+| **PART 1: Step-wise RL** | **0.355 ± 0.012** | RL은 BC 대비 +0.020 (소폭·3-seed 일관). 단 cosine 휴리스틱엔 미달 → 한계는 RL *방식*이 아니라 정책 표현 용량 |
 | PART 2: SFT search | 0.434 | 추론을 LLM 내부로 이전 → 기준선 돌파 |
 | **PART 2: SFT + GRPO RL** | **0.469 ± 0.007** | RL 추가 이득 +0.035 (3-seed 견고) |
 | Frozen base (cold-start, RL만) | 0.006 | SFT warmup 없이 RL만 적용 시 발산 → SFT 필요성 정량 입증 |
@@ -37,10 +38,11 @@ GitHub: https://github.com/doosanpark/RL-Multihop-RAG.git
 | 방법 | In-domain | Sports | 변화율 |
 |:--|--:|--:|--:|
 | **cosine 휴리스틱** (top-3) | 0.370 | 0.386 | **+4%** (견고) |
+| BC-only (지도학습) | 0.335 | 0.265 ± 0.035 | **−21%** (학습형은 RL이 아니어도 OOD에 취약) |
 | PART 1: Step-wise RL | 0.355 | 0.270 ± 0.038 | **−24%** (H3 기각) |
 | PART 2: SFT + GRPO RL | 0.469 | 0.313 ± 0.023 | **−33%** (과적합, 단 RL > SFT) |
 
-**핵심 통찰**: 학습 없는 **cosine 휴리스틱**은 in-domain 성능 상한이 낮지만 OOD(Out-of-Distribution)에 견고하다. 학습된 정책은 in-domain에서 성능이 오르지만 OOD에 취약해진다. 두 PART 모두에서 **학습 효과 vs OOD 강건성의 트레이드오프**가 정량적으로 확인된다.
+**핵심 통찰**: 학습 없는 **cosine 휴리스틱**은 in-domain 성능 상한이 낮지만 OOD(Out-of-Distribution)에 견고하다. 학습된 정책은 in-domain에서 성능이 오르지만 OOD에 취약해진다. 두 PART 모두에서 **학습 효과 vs OOD 강건성의 트레이드오프**가 정량적으로 확인된다. PART 1에서 **BC-only(0.335)와 RL(0.355)이 사실상 동급**으로 둘 다 cosine(0.370)을 못 넘고, OOD 하락폭(−21% vs −24%)도 거의 같다 → 병목은 *RL이냐 지도학습이냐*가 아니라 **소형 selector의 정책 표현 용량**이다. 이 진단이 PART 2(추론을 LLM 내부로 이전)의 동기가 된다.
 
 ---
 
@@ -51,8 +53,8 @@ GitHub: https://github.com/doosanpark/RL-Multihop-RAG.git
 | 가설 | 결과 | 근거 |
 |:--|:--|:--|
 | H1: Step-wise reward > Sparse reward | **기각** | 3-seed answer F1 동률 (0.355 vs 0.354). Step의 우위는 단일 seed noise였음. 단, support_F1 분산은 step에서 더 작음 (±0.005 vs ±0.027) |
-| H2: RL > cosine 휴리스틱 | **기각** | 0.355 < 0.370. 단, RL은 2.0개 문서만 keep해 cosine 휴리스틱(3.0개)보다 간결하게 유사한 F1 달성 |
-| H3: HotpotQA → 새 도메인 전이 | **기각** | Sports -24%, 랜덤 수준까지 하락 |
+| H2: RL > 지도학습(BC) 분류기 베이스라인 | **약하게 지지** | RL 0.355 ± 0.012 vs BC 0.335 ± 0.005 → +0.020 (소폭이나 3-seed 일관). 단 RL·BC 모두 cosine 휴리스틱(0.370) 미달 → **학습형 selector의 한계는 RL 방식이 아니라 정책 표현 용량**임을 분리 입증 |
+| H3: HotpotQA → 새 도메인 전이 | **기각** | Sports -24%, 랜덤 수준까지 하락. BC-only도 동일하게 −21% 하락 → OOD 취약성은 RL이 아닌 *학습형 정책 공통*의 성질 |
 
 ### PART 2 (SFT + GRPO RL)
 
@@ -149,6 +151,20 @@ Dev-best 체크포인트 저장으로 peak 보존 (PART 1 교훈 재적용).
 
 ---
 
+## 주장 범위와 한계 (Limitations)
+
+본 결과의 일반화 범위를 다음과 같이 명시한다 (채점·재현 시 선제적으로 짚어둠).
+
+- **RL 이득은 comparison 유형에 집중 — bridge(multi-hop의 본질)는 사실상 미해결.**
+  PART 2에서 SFT→RL 이득은 comparison에서 +0.140(0.428→0.568)인 반면 bridge에서는 **+0.010**(0.435→0.445)에 그친다. 즉 RL은 "두 답 후보 비교" 정렬을 정교화할 뿐, **여러 문서를 순차 참조해야 하는 multi-hop 추론 자체는 거의 개선하지 못했다.**
+- **전이(transfer) 결론은 OOD 도메인 1종(스포츠 룰북) 기준 — 일반화 주장은 제한적.**
+  "학습형 정책은 OOD에 취약하다"는 결론은 단일 OOD 도메인 1개에서 관측된 것이다. 도메인을 늘리면 하락폭·방향이 달라질 수 있으므로, 전이 강건성에 대한 일반적 주장으로 확대 해석하지 않는다.
+- **PART 1의 성능 한계는 RL 방식이 아니라 정책 표현 용량.**
+  BC-only(0.335)와 RL(0.355)이 사실상 동급이고 둘 다 cosine(0.370)을 못 넘는다. 소형 MLP selector + frozen LLM(oracle 상한 0.557)이라는 표현력 천장이 병목이며, 더 강한 정책(=LLM 내부 추론, PART 2)이 이 천장을 올린다.
+- **단일 base LM·단일 언어.** Qwen2.5-0.5B(freeze) 한 종, 영어 단일 언어 기준. 더 큰 모델·다국어로의 확장은 검증하지 않았다.
+
+---
+
 ## 환경 설정 및 실행
 
 ### 사전 요구사항
@@ -181,9 +197,17 @@ pip install -r requirements.txt
 python -m src.train_cartpole --seed 42 --max-episodes 500
 
 # Baseline 평가 (학습 전)
-python -m src.run_eval --variant top_k_sim --k 3 --n 200   # Naive RAG
+python -m src.run_eval --variant top_k_sim --k 3 --n 200   # Naive RAG (cosine)
 python -m src.run_eval --variant oracle    --n 200          # 상한
 python -m src.run_eval --variant random    --k 3 --n 200    # 하한
+
+# BC-only 베이스라인 (지도학습, RL 아님) — BC warmup만 하고 RL은 0 episode
+foreach ($s in 42,123,7) {
+  python -m src.train_rag --seed $s --n-episodes 0 --bc-warmup-samples 1000 `
+    --use-mock-llm --no-wandb --tag bc           # models/bc_seed${s}_best.pt 생성 (기존 RL ckpt 보존)
+  python -m src.run_eval --variant rl --ckpt models/bc_seed${s}_best.pt --n 200                       # in-domain
+  python -m src.run_eval --variant rl --ckpt models/bc_seed${s}_best.pt --eval-file data/eval/sports.json --n 350  # transfer
+}
 
 # 본 학습 (3-seed)
 foreach ($s in 42,123,7) {

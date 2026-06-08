@@ -79,11 +79,16 @@ def plot_curves():
 
 
 def aggregate_table():
-    """eval json들을 step/sparse별로 모아 seed 평균±std."""
+    """eval json들을 step/sparse/bc별로 모아 seed 평균±std.
+
+    bc = BC-only (지도학습 베이스라인): RL 없이 expert 모방학습만 한 정책.
+    학습형이지만 RL이 아닌 비교군으로, "RL의 한계는 방식이 아니라 정책 표현 용량"을
+    분리 입증한다.
+    """
     print(f"\n{'method':<16}{'answer_F1':>16}{'support_F1':>16}{'EM':>10}  (seeds)")
     print("-" * 64)
     summary = {}
-    for tag in ["step", "sparse"]:
+    for tag in ["step", "sparse", "bc"]:
         f1s, sups, ems, seeds_found = [], [], [], []
         for s in SEEDS:
             cands = glob.glob(str(RESULTS / f"eval_rl_{tag}_seed{s}_best_*_n200.json"))

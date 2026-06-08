@@ -231,6 +231,11 @@ def main() -> None:
                         help="dev 평가 샘플 수 (validation split)")
     parser.add_argument("--weight-decay", type=float, default=1e-4,
                         help="optimizer L2 정규화 (과적합 억제)")
+    parser.add_argument("--tag", type=str, default=None,
+                        help="체크포인트 파일명 prefix override. 미지정 시 "
+                             "step/sparse(use_step_reward)로 자동 결정. "
+                             "예: --n-episodes 0 --tag bc 로 BC-only 정책 저장 "
+                             "(기존 step/sparse 체크포인트 덮어쓰기 방지).")
     args = parser.parse_args()
 
     set_seed(args.seed)
@@ -300,7 +305,7 @@ def main() -> None:
 
     episode_batch: List[List[Transition]] = []  # batch_episodes만큼 모아 업데이트
     update_info: Dict[str, Any] = {"policy_loss": 0.0, "value_loss": 0.0, "entropy": 0.0}
-    tag = "step" if args.use_step_reward else "sparse"
+    tag = args.tag or ("step" if args.use_step_reward else "sparse")
     best_dev_f1 = -1.0
     best_ckpt_path = MODELS_DIR / f"{tag}_seed{args.seed}_best.pt"
 
@@ -430,7 +435,7 @@ def main() -> None:
             print(f"  [ckpt] {ckpt}")
 
     # 최종 저장
-    tag = "step" if args.use_step_reward else "sparse"
+    tag = args.tag or ("step" if args.use_step_reward else "sparse")
     final_path = MODELS_DIR / f"{tag}_seed{args.seed}_final.pt"
     torch.save(
         {

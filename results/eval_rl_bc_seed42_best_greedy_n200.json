@@ -1,0 +1,31 @@
+{
+  "n": 200,
+  "answer_f1": 0.3411309523809524,
+  "answer_f1_std": 0.4419419587113386,
+  "exact_match": 0.26,
+  "support_f1": 0.5408333333333334,
+  "avg_n_kept": 1.995,
+  "avg_n_steps": 9.91,
+  "elapsed_sec": 31.752784967422485,
+  "by_type": {
+    "bridge": {
+      "f1": 0.3072191697191697,
+      "n": 156
+    },
+    "comparison": {
+      "f1": 0.4613636363636363,
+      "n": 44
+    }
+  },
+  "by_level": {
+    "hard": {
+      "f1": 0.3411309523809524,
+      "n": 200
+    }
+  },
+  "variant": "rl_bc_seed42_best_greedy",
+  "domain": "hotpotqa",
+  "n_eval": 200,
+  "ckpt": "models/bc_seed42_best.pt",
+  "policy_mode": "greedy"
+}
